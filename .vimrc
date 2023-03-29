@@ -6,17 +6,13 @@ set runtimepath^=~/.vim/bundle/vim-airline
 set runtimepath^=~/.vim/bundle/vim-prettier
 set runtimepath^=~/.vim/colors/distinguished.vim
 set runtimepath^=~/.vim/bundle/vim-go
-"set runtimepath^=~/.vim/bundle/jshint.vim
-
-let g:NERDTreeDirArrows=0
-set pastetoggle=<F9>
 
 "### Color
 set background=dark
-colorscheme distinguished
 set t_Co=256
 set mouse=a
-syntax enable           " enable syntax processing
+syntax enable
+set re=0
 
 "### Multiple Cursor
 let g:multi_cursor_use_default_mapping=1
@@ -60,6 +56,7 @@ set backupskip=/tmp/*,/private/tmp/*
 set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set writebackup
 
+"### Filetype
 augroup configgroup
     autocmd!
     autocmd BufWritePre *.php,*.py,*.txt,*.hs,*.md :call <SID>StripTrailingWhitespaces()
@@ -72,7 +69,6 @@ augroup configgroup
     autocmd BufEnter *.cls setlocal filetype=java
     autocmd BufEnter *.zsh-theme setlocal filetype=zsh
 augroup END
-
 
 " toggle between number and relativenumber
 function! ToggleNumber()
@@ -108,14 +104,14 @@ augroup ForbidReplaceMode
     autocmd InsertChange * call s:ForbidReplace()
 augroup END
 
-set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
-
 " Always show statusline
 set laststatus=2
 
-" Use 256 colours (Use this setting only if your terminal supports 256 colours)
-"set t_Co=256
+" air-line
 let g:airline_powerline_fonts = 1
+
+set noshowmode
+set cmdheight=0
 
 command Paste r !parcellite -c
 set clipboard=unnamedplus
@@ -125,16 +121,8 @@ cmap w!! w !sudo tee > /dev/null %<CR>
 
 " I should have put this line of conf since the first day I fall'n love with vim. :(
 vnoremap u <nop>
-let jshint2_save = 1
 
-set paste
-
-"### Space and Tabs
-"set tabstop=2 
-"set softtabstop=0 
-"set expandtab 
-"set shiftwidth=2 
-"set smarttab
+"### Indentation
 autocmd FileType python set tabstop=8|set shiftwidth=2|set expandtab
 autocmd FileType make set noexpandtab
 autocmd FileType javascript set tabstop=2|set softtabstop=0|set expandtab|set shiftwidth=2|set smarttab
@@ -147,15 +135,6 @@ autocmd FileType proto set copyindent|set preserveindent|set tabstop=2|set softt
 autocmd FileType go set copyindent|set preserveindent|set tabstop=2|set expandtab
 
 
-"if empty(glob('~/.vim/autoload/plug.vim'))
-"  silent execute "!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-"  autocmd VimEnter * PlugInstall | source $MYVIMRC
-"endif
-"
-"call plug#begin('~/.vim/plugged')
-"Plug 'thaerkh/vim-indentguides'
-"call plug#end()
-
 " This configurations below is needed since VIM 8.2
 " Allow yank
 if system('uname -s') == "Darwin\n"
@@ -166,22 +145,50 @@ endif
 " Allow backspace
 set backspace=indent,eol,start  " more powerful backspacing
 
+"### Disable middle mouse
 nnoremap <MiddleMouse> <Nop>
 nnoremap <2-MiddleMouse> <Nop>
 nnoremap <3-MiddleMouse> <Nop>
 nnoremap <4-MiddleMouse> <Nop>
-
 inoremap <MiddleMouse> <Nop>
 inoremap <2-MiddleMouse> <Nop>
 inoremap <3-MiddleMouse> <Nop>
 inoremap <4-MiddleMouse> <Nop>
 
+"### NERDTree
+let g:NERDTreeDirArrows=1
 let NERDTreeShowHidden=1
+" "pen automatically at startup
+function! StartUp()
+    if 0 == argc()
+        NERDTree
+    end
+endfunction
+autocmd VimEnter * call StartUp()
 
+
+
+"### Linter
 let g:prettier#config#single_quote = 'true'
 
-call plug#begin()
+"### Golang related
+let g:go_fmt_command = "goimports"
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+let g:go_highlight_diagnostic_errors = 1
+let g:go_highlight_diagnostic_warnings = 1
+au filetype go inoremap <buffer> . .<C-x><C-o>
+
+"### Vim-Plug
+call plug#begin(expand('~/nvim/plugged'))
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'crusoexia/vim-monokai'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-gocode.vim'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 call plug#end()
 
-let g:go_fmt_command = "goimports"
+colorscheme monokai
+
