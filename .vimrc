@@ -133,7 +133,7 @@ autocmd FileType html set copyindent|set preserveindent|set tabstop=2|set softta
 autocmd FileType css set copyindent|set preserveindent|set tabstop=2|set softtabstop=0|set expandtab|set shiftwidth=2|set smarttab
 autocmd FileType proto set copyindent|set preserveindent|set tabstop=2|set softtabstop=0|set expandtab|set shiftwidth=2|set smarttab
 autocmd FileType go set copyindent|set preserveindent|set tabstop=2|set expandtab
-
+au BufNewFile,BufRead *.go setlocal noet ts=2 sw=2 sts=2
 
 " This configurations below is needed since VIM 8.2
 " Allow yank
@@ -177,7 +177,8 @@ let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 let g:go_highlight_diagnostic_errors = 1
 let g:go_highlight_diagnostic_warnings = 1
-au filetype go inoremap <buffer> . .<C-x><C-o>
+"au filetype go inoremap <buffer> . .<C-x><C-o>
+imap <C-c> <Esc>
 
 "### Vim-Plug
 call plug#begin(expand('~/nvim/plugged'))
@@ -188,6 +189,8 @@ Plug 'prabirshrestha/asyncomplete-gocode.vim'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
+Plug 'Exafunction/codeium.vim'
 call plug#end()
 
 colorscheme monokai
