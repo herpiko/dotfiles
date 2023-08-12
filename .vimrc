@@ -170,6 +170,7 @@ autocmd VimEnter * call StartUp()
 
 "### Linter
 let g:prettier#config#single_quote = 'true'
+let g:prettier#config#trailing_comma = 'all'
 
 "### Golang related
 let g:go_fmt_command = "goimports"
@@ -194,4 +195,5 @@ Plug 'Exafunction/codeium.vim'
 call plug#end()
 
 colorscheme monokai
+
 
