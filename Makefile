@@ -13,4 +13,8 @@ install:
 	@cp -r ${I3} ${HOME}/.config/
 	@cp -r ${ZSHRC} ${HOME}
 	@cp -r ${TMUX} ${HOME}
+	mkdir -p ~/.local/share/nvim
+	ln -s ~/.vim ~/.local/share/nvim/site
+	mkdir -p ~/.config/nvim
+	ln -s ~/.vim ~/.local/share/nvim/site
 	@echo "Happy hacking!"
