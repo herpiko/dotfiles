@@ -14,10 +14,11 @@ install:
 	@cp -r ${ZSHRC} ${HOME}
 	@cp -r ${TMUX} ${HOME}
 	# nvim sync
-	mkdir -p ~/.local/share/nvim
+	rm -rf ~/.local/share/nvim/site
+	rm -rf ~/.config/nvim/init.vim
 	ln -s ~/.vim ~/.local/share/nvim/site
-	mkdir -p ~/.config/nvim
-	ln -s ~/.vim ~/.local/share/nvim/site
+	ln -s ~/.vimrc ~/.config/nvim/init.vim
 	# Disable hold press and enable repeated key for vim navigation
-	defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+	# Comment this line in Linux
+	#defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 	@echo "Happy hacking!"
