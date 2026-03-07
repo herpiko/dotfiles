@@ -111,7 +111,7 @@ set laststatus=2
 let g:airline_powerline_fonts = 1
 
 set noshowmode
-set cmdheight=0
+"set cmdheight=0
 
 command Paste r !parcellite -c
 set clipboard=unnamedplus
@@ -194,6 +194,6 @@ Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --producti
 Plug 'Exafunction/codeium.vim'
 call plug#end()
 
-colorscheme monokai
+"colorscheme monokai
 
 
