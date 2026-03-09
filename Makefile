@@ -68,12 +68,21 @@ setup-claude:
 	curl -fsSL https://claude.ai/install.sh | bash
 
 setup-docker:
-	sudo apt update
-	sudo apt install -y ca-certificates curl
-	sudo install -m 0755 -d /etc/apt/keyrings
-	sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-	sudo chmod a+r /etc/apt/keyrings/docker.asc
-	printf 'Types: deb\nURIs: https://download.docker.com/linux/debian\nSuites: bookworm\nComponents: stable\nSigned-By: /etc/apt/keyrings/docker.asc\n' | sudo tee /etc/apt/sources.list.d/docker.sources
-	sudo apt update
-	sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-	sudo usermod -aG docker $USER
+	@if [ -f /etc/debian_version ]; then \
+		sudo apt update && \
+		sudo apt install -y ca-certificates curl && \
+		sudo install -m 0755 -d /etc/apt/keyrings && \
+		sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
+		sudo chmod a+r /etc/apt/keyrings/docker.asc && \
+		printf 'Types: deb\nURIs: https://download.docker.com/linux/debian\nSuites: bookworm\nComponents: stable\nSigned-By: /etc/apt/keyrings/docker.asc\n' | sudo tee /etc/apt/sources.list.d/docker.sources && \
+		sudo apt update && \
+		sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin; \
+	elif [ -f /etc/fedora-release ]; then \
+		sudo yum install -y yum-utils && \
+		sudo yum-config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo && \
+		sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin && \
+		sudo systemctl enable --now docker; \
+	else \
+		echo "Unsupported OS"; exit 1; \
+	fi
+	sudo usermod -aG docker $$USER
