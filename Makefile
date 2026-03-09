@@ -4,7 +4,7 @@ TMUX = ./.tmux*
 I3 = ./.config/i3*
 ZSHRC = ./.zshrc*
 
-setup: setup-dotfiles setup-nvim setup-git setup-nvm setup-golang setup-golang-migrate setup-docker setup-ctrl-caplock-swap setup-rc
+setup: setup-dotfiles setup-packages setup-nvim setup-git setup-nvm setup-golang setup-golang-migrate setup-docker setup-ctrl-caplock-swap setup-claude setup-rc
 	@echo "Happy hacking!"
 
 setup-dotfiles:
@@ -36,8 +36,15 @@ setup-nvm:
 	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
 	export NVM_DIR="$$HOME/.nvm" && . "$$NVM_DIR/nvm.sh" && nvm install --lts
 
-setup-debian:
-	sudo apt install -y build-essential neovim jq openssh-client zsh zsync postgresql-client-18 fastfetch gnome-tweaks
+setup-packages:
+	@if [ -f /etc/debian_version ]; then \
+		sudo apt update && \
+		sudo apt install -y build-essential neovim jq openssh-client zsh zsync postgresql-client-18 fastfetch gnome-tweaks; \
+	elif [ -f /etc/fedora-release ]; then \
+		sudo yum install -y gcc gcc-c++ make neovim jq openssh-clients zsh zsync postgresql fastfetch gnome-tweaks; \
+	else \
+		echo "Unsupported OS"; exit 1; \
+	fi
 
 setup-ctrl-caplock-swap:
 	gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:swapcaps']"
@@ -56,6 +63,9 @@ setup-rc:
 
 setup-golang-migrate:
 	/usr/local/go/bin/go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+setup-claude:
+	curl -fsSL https://claude.ai/install.sh | bash
 
 setup-docker:
 	sudo apt update
