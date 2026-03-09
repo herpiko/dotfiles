@@ -4,7 +4,7 @@ TMUX = ./.tmux*
 I3 = ./.config/i3*
 ZSHRC = ./.zshrc*
 
-setup: setup-dotfiles setup-nvim setup-git setup-nvm setup-golang setup-docker setup-rc
+setup: setup-dotfiles setup-nvim setup-git setup-nvm setup-golang setup-golang-migrate setup-docker setup-ctrl-caplock-swap setup-rc
 	@echo "Happy hacking!"
 
 setup-dotfiles:
@@ -39,6 +39,9 @@ setup-nvm:
 setup-debian:
 	sudo apt install -y build-essential neovim jq openssh-client zsh zsync postgresql-client-18 fastfetch gnome-tweaks
 
+setup-ctrl-caplock-swap:
+	gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:swapcaps']"
+
 setup-golang:
 	curl -fsSL https://go.dev/dl/go1.26.1.linux-amd64.tar.gz -o /tmp/go1.26.1.linux-amd64.tar.gz
 	sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go1.26.1.linux-amd64.tar.gz
@@ -52,8 +55,7 @@ setup-rc:
 	@grep -qxF 'export PATH="$$PATH:$$HOME/go/bin"' $(HOME)/.zshrc || echo 'export PATH="$$PATH:$$HOME/go/bin"' >> $(HOME)/.zshrc
 
 setup-golang-migrate:
-	go get -u -d github.com/golang-migrate/migrate/cmd/migrate
-	go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+	/usr/local/go/bin/go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 
 setup-docker:
 	sudo apt update
@@ -64,3 +66,4 @@ setup-docker:
 	printf 'Types: deb\nURIs: https://download.docker.com/linux/debian\nSuites: bookworm\nComponents: stable\nSigned-By: /etc/apt/keyrings/docker.asc\n' | sudo tee /etc/apt/sources.list.d/docker.sources
 	sudo apt update
 	sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+	sudo usermod -aG docker $USER
