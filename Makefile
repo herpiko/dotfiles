@@ -37,7 +37,7 @@ setup-nvm:
 	export NVM_DIR="$$HOME/.nvm" && . "$$NVM_DIR/nvm.sh" && nvm install --lts
 
 setup-debian:
-	sudo apt install -y build-essential neovim jq openssh-client zsh zsync postgresql-client-18
+	sudo apt install -y build-essential neovim jq openssh-client zsh zsync postgresql-client-18 fastfetch
 
 setup-golang:
 	curl -fsSL https://go.dev/dl/go1.26.1.linux-amd64.tar.gz -o /tmp/go1.26.1.linux-amd64.tar.gz
